@@ -1,6 +1,8 @@
-﻿using RodriguezJ_IntegracionGemini.Interfaces;
+﻿using Newtonsoft.Json;
+using RodriguezJ_IntegracionGemini.Interfaces;
 using RodriguezJ_IntegracionGemini.Models;
 using System.Net.Http;
+using System.Text;
 
 namespace RodriguezJ_IntegracionGemini.Repositories
 {
@@ -13,7 +15,7 @@ namespace RodriguezJ_IntegracionGemini.Repositories
         {
             _httpClient = new HttpClient();
         }
-        public Task<string> GetChatbotResponse(string prompt)
+        public async Task<string> GetChatbotResponseAsync(string prompt)
         {
             string url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + GeminiKey;
             GeminiRequest request = new GeminiRequest
@@ -32,6 +34,13 @@ namespace RodriguezJ_IntegracionGemini.Repositories
                     }
                 }
             };
+
+            string requestJson = JsonConvert.SerializeObject(request);
+            var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(url, content);
+            var answer = await response.Content.ReadAsStringAsync();
+            return answer;
+
         }
 
         public Task<bool> SaveResponseInDatabase(string chatbotPrmompt, string chatbotResponse)

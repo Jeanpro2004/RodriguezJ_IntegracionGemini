@@ -4,7 +4,7 @@ namespace RodriguezJ_IntegracionGemini.Repositories
 {
     public class OpenAIRepository : IChatbotService
     {
-        public Task<string> GetChatbotResponse(string prompt)
+        public Task<string> GetChatbotResponseAsync(string prompt)
         {
             throw new NotImplementedException();
         }

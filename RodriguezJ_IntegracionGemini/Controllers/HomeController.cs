@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using RodriguezJ_IntegracionGemini.Models;
+using RodriguezJ_IntegracionGemini.Repositories;
 
 namespace RodriguezJ_IntegracionGemini.Controllers;
 
@@ -13,8 +14,11 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
+    public async Task <IActionResult> Index()
     {
+        GeminiRepository repo = new GeminiRepository();
+        string response = await repo.GetChatbotResponseAsync("Hola, ¿cómo estás?");
+        ViewBag.chatbotAnswer = response;
         return View();
     }
 
